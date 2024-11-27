@@ -1,11 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
+
+import '../exceptions/invalid_name_exception.dart';
+import '../exceptions/only_numbers_exception.dart';
+import '../util/console_utils.dart';
 
 class Person {
   String _name = "";
   double _weight = 0.0;
   double _height = 0.0;
-  double _imc = 0.0;
+  late final double _imc;
 
   Person();
 
@@ -21,18 +25,42 @@ class Person {
     _height = height;
   }
 
+  void setImc(double imc){
+    _imc = imc;
+  }
+
   String getName() => _name;
 
   double getWeight() => _weight;
 
   double getHeight() => _height;
 
-  double getImc() => calculateImc();
+  double getImc() => _imc;
 
   double calculateImc() {
-    try {
-      return double.parse((_weight / (_height * _height)).toStringAsFixed(2));
-    } catch (e) {
+
+    try{
+      print("Inform the name: ");
+      var name = stdin.readLineSync(encoding: utf8);
+      if(name == "") {
+        throw InvalidNameException();
+      }
+      setName(name!);
+
+      print("Inform the weight: ");
+      setWeight(ConsoleUtils.lerDouble());
+
+      print("Inform the height: ");
+      setHeight(ConsoleUtils.lerDouble());
+
+      setImc(double.parse((_weight / (_height * _height)).toStringAsFixed(2)));
+      return getImc();
+
+    } on FormatException {
+      print(OnlyNumbersException().toString());
+      exit(0);
+
+    } catch(e) {
       print(e);
       exit(0);
     }
