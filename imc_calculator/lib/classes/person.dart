@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:math';
+
 class Person {
   String _name = "";
   double _weight = 0.0;
@@ -24,6 +27,15 @@ class Person {
 
   double getHeight() => _height;
 
-  double getImc() => _imc = _imc = _weight / (_height * _height);
+  double getImc() => calculateImc();
+
+  double calculateImc() {
+    try {
+      return double.parse((_weight / (_height * _height)).toStringAsFixed(2));
+    } catch (e) {
+      print(e);
+      exit(0);
+    }
+  }
 
 }

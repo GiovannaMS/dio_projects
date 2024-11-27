@@ -1,20 +1,37 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:imc_calculator/models/person.dart';
+import 'package:imc_calculator/classes/person.dart';
+import 'package:imc_calculator/exceptions/invalid_name_exception.dart';
+import 'package:imc_calculator/exceptions/only_numbers_exception.dart';
+import 'package:imc_calculator/util/console_utils.dart';
 
 void main(List<String> arguments) {
 
   Person person1 = Person();
 
-  print("Informe o nome da pessoa: ");
-  person1.setName(stdin.readLineSync(encoding: utf8) ?? "");
+  try{
+    print("Inform the name: ");
+    var name = stdin.readLineSync(encoding: utf8);
+    if(name == "") {
+      throw InvalidNameException();
+    }
+    person1.setName(name!);
 
-  print("Informe o peso da pessoa: ");
-  person1.setWeight(double.parse(stdin.readLineSync(encoding: utf8).toString()) ?? 0.0);
+    print("Inform the weight: ");
+    person1.setWeight(ConsoleUtils.lerDouble());
 
-  print("Informe a altura da pessoa: ");
-  person1.setHeight(double.parse(stdin.readLineSync(encoding: utf8).toString()) ?? 0.0);
+    print("Inform the height: ");
+    person1.setHeight(ConsoleUtils.lerDouble());
 
-  print('IMC: ${person1.getImc()}');
+    print('IMC: ${person1.getImc()}');
+
+  } on FormatException {
+    print(OnlyNumbersException().toString());
+    exit(0);
+
+  } catch(e) {
+    print(e);
+    exit(0);
+  }
 }
