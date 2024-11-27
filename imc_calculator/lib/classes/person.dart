@@ -37,23 +37,10 @@ class Person {
 
   double getImc() => _imc;
 
-  double calculateImc() {
+  double calculateImc(double height, double weight) {
 
     try{
-      print("Inform the name: ");
-      var name = stdin.readLineSync(encoding: utf8);
-      if(name == "") {
-        throw InvalidNameException();
-      }
-      setName(name!);
-
-      print("Inform the weight: ");
-      setWeight(ConsoleUtils.lerDouble());
-
-      print("Inform the height: ");
-      setHeight(ConsoleUtils.lerDouble());
-
-      setImc(double.parse((_weight / (_height * _height)).toStringAsFixed(2)));
+      setImc(double.parse((weight / (height * height)).toStringAsFixed(2)));
       return getImc();
 
     } on FormatException {
